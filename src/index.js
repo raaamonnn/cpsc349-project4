@@ -1,4 +1,5 @@
 import './tailwind.css'
+import './init.js'
 import './magnifying-glass.png'
 
 import * as mockroblog from './mockroblog.js'
