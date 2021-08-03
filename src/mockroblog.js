@@ -11,6 +11,16 @@ export function createUser (username, email, password) {
   }
 }
 
+export function returnUsername (userId) {
+  if (userId === 1) {
+    return 'ProfAvery'
+  } else if (userId === 2) {
+    return 'KevinAWortman'
+  } else if (userId === 3) {
+    return 'Beth_CSUF'
+  }
+}
+
 export function authenticateUser (username, password) {
   if (username === 'ProfAvery' && password === 'password') {
     return {

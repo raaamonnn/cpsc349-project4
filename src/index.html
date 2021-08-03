@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>API Test</title>
+<head> 
+    <title>Mockroblog</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    </head>
-    <body class="bg-gray-50 flex flex-col min-h-screen">
-        <div class="container flex-grow px-8">
-            <h1>API Test</h1>
-
-            <form id="search">
-                <div class="relative">
-                    <span class="absolute inset-y-0 flex items-center pl-2">
-                        <img src="./magnifying-glass.png" class="w-5 h-5">
-                    </span>
-                    <input type="search" id="keyword" name="q" class="pl-10 pr-1 py-1" placeholder="keyword..." autofocus>
-                </div>
-            </form>
-
-            <div id="results" class="py-2" hidden>
-                <h2>Search Results</h2>
-                <pre id="result-value">None</pre>
-            </div>
-        </div>
-
-        <footer class="text-xs flow-root">
-            <div class="pl-2 float-left">
-                Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a>
-                from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-            </div>
-            <div class="float-right pr-2">
-                Search input with integrated icon by
-                <a href="https://tailwindcomponents.com/u/cricksu" title="Criksu">Cricksu</a>
-                from
-                <a href="https://tailwindcomponents.com/component/search-input-with-integrated-icon-and-button" title="TailwindComponents">tailwindcomponents.com</a>
-            </div>
-        </footer>
-    </body>
+</head> 
+<body class=bg-blue-200>
+  <nav>
+    <ul>
+        <li><a href="register.html" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">Register</a></li>
+        
+        <!--<li><a href="register.html">Register</a></li>
+        <button href="register.html" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">Register</button>-->
+    </ul>
+</nav>
+<!--login page taken from tailblocks-->
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-24 mx-auto flex flex-wrap items-center">
+    <div class="lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0">
+      <h1 class="title-font font-medium text-3xl text-gray-900">Mockroblog</h1>
+      <p class="leading-relaxed text-2xl">Login page</p>
+    </div>
+    <!--
+        <input type="text" placeholder="username" id="loginUsername"/>
+              <input type="password" placeholder="password" id="loginPassword"/>
+              <button id="login">Login</button>
+    -->
+    <div class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
+      <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Log In</h2>
+      <div class="relative mb-4">
+        <label for="loginUsername" class="leading-7 text-sm text-gray-600">User ID</label>
+        <input type="text" id="loginUsername" name="user-id" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+      </div>
+      <div class="relative mb-4">
+        <label for="loginPassword" class="leading-7 text-sm text-gray-600">password</label>
+        <input type="password" id="loginPassword" name="password" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+      </div>
+      <!--<button id="login" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">Button</button>-->
+      <button id="login" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">Login</button>
+    </div>
+  </div>
+</section>
+</body> 
 </html>
