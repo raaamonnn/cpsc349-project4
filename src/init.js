@@ -21,10 +21,13 @@ const getUser = function () {
 // post button on post page
 if (document.getElementById('finalpost') != null) {
   const postBtn = document.getElementById('finalpost')
-  postBtn.addEventListener('click', function () {
+  postBtn.addEventListener('click', async event => {
+    event.preventDefault();
     console.log(document.getElementById('message').value)
     if (document.getElementById('message').value) {
-      postMessage(getUser().value, document.getElementById('message'))
+      console.log(getUser().value)
+      console.log(document.getElementById('message').value)
+      await postMessage(getUser().value, document.getElementById('message').value)
       console.log(document.getElementById('message'))
       alert('message posted')
       window.location.href = 'hometimeline.html'
@@ -81,17 +84,18 @@ if (document.getElementById('login') != null) {
 // register site
 if (document.getElementById('register') != null) {
   const registerBtn = document.getElementById('register')
-  registerBtn.addEventListener('click', function () {
+  registerBtn.addEventListener('click', async event => {
+    event.preventDefault();
     if (!document.getElementById('registerUsername').value || !document.getElementById('registerEmail').value || !document.getElementById('registerPassword').value) {
       alert('Failed Register. Make sure to fill out all fields')
       return
     }
 
-    if (mockroblog.createUser(document.getElementById('registerUsername').value, document.getElementById('registerEmail').value, document.getElementById('registerPassword').value) != null) {
+    if (await mockroblog.createUser(document.getElementById('registerUsername').value, document.getElementById('registerEmail').value, document.getElementById('registerPassword').value) != null) {
       window.location = window.location.toString().replace('register.html', 'hometimeline.html')
     } else {
       // display unsuccesful message
-      alert('Failed Register')
+      alert('User already Exists')
     }
   })
 }
