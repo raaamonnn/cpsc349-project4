@@ -60,14 +60,14 @@ if (document.getElementById('loginpage') != null) {
 // login button on login page
 if (document.getElementById('login') != null) {
   const loginBtn = document.getElementById('login')
-  loginBtn.addEventListener('click', function () {
-    console.log(document.getElementById('loginUsername').value)
+  loginBtn.addEventListener('click', async event => {
+    event.preventDefault();
     if (!document.getElementById('loginUsername').value || !document.getElementById('loginPassword').value) {
       alert('Failed Login. Make sure to fill out all fields')
       return
     }
 
-    if (mockroblog.authenticateUser(document.getElementById('loginUsername').value, document.getElementById('loginPassword').value) != null) {
+    if (await mockroblog.authenticateUser(document.getElementById('loginUsername').value, document.getElementById('loginPassword').value) != null) {
       // save user logged in
       setUser()
       window.location.href = 'hometimeline.html'
@@ -75,6 +75,7 @@ if (document.getElementById('login') != null) {
       // display unsuccesful message
       alert('Failed Login')
     }
+    
   })
 }
 // register site
