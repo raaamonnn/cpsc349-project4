@@ -1,14 +1,28 @@
 /* Mockroblog client API stubs for prototyping */
 
 export function createUser (username, email, password) {
-  if (['ProfAvery', 'KevinAWortman', 'Beth_CSUF'].indexOf(username) < 0) {
-    return {
-      id: 4,
-      username: username,
-      email: email,
-      password: password
-    }
-  }
+  // if (['ProfAvery', 'KevinAWortman', 'Beth_CSUF'].indexOf(username) < 0) {
+  //   return {
+  //     id: 4,
+  //     username: username,
+  //     email: email,
+  //     password: password
+  //   }
+  // }
+
+  return fetch(`http://localhost:5000/users/`, {method : 'post', body: JSON.stringify({
+    "username": `${username}`,
+    "email": `${email}`,
+    "password": `${password}`})
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json)
+      return json
+    }).catch((error) => {
+		  console.log("User already exists")
+      return null;
+	});
 }
 
 export function returnUsername (userId) {
@@ -36,8 +50,9 @@ export function authenticateUser (username, password) {
 }
 
 export function addFollower (userId, userIdToFollow) {
-  return fetch(`http://localhost:5000/followers/`, {method : 'post', body: JSON.stringify(`{"follower_id": ${userId},
-    "following_id": ${userIdToFollow}}`)})
+  return fetch(`http://localhost:5000/followers/`, {method : 'post', body: JSON.stringify({
+    "follower_id": `${userId}`,
+    "following_id": `${userIdToFollow}`})})
     .then((res) => res.json())
     .then((json) => {
       console.log(json)
@@ -211,21 +226,29 @@ export function getHomeTimeline (username) {
 }
 
 export function postMessage (userId, text) {
-  if (userId > 3) {
-    const now = new Date()
-    const timestamp =
-      now.getUTCFullYear() + '-' +
-      String(now.getUTCMonth() + 1).padStart(2, '0') + '-' +
-      String(now.getUTCDate()).padStart(2, '0') + ' ' +
-      String(now.getUTCHours()).padStart(2, '0') + ':' +
-      String(now.getUTCMinutes()).padStart(2, '0') + ':' +
-      String(now.getUTCSeconds()).padStart(2, '0')
+  // if (userId > 3) {
+  //   const now = new Date()
+  //   const timestamp =
+  //     now.getUTCFullYear() + '-' +
+  //     String(now.getUTCMonth() + 1).padStart(2, '0') + '-' +
+  //     String(now.getUTCDate()).padStart(2, '0') + ' ' +
+  //     String(now.getUTCHours()).padStart(2, '0') + ':' +
+  //     String(now.getUTCMinutes()).padStart(2, '0') + ':' +
+  //     String(now.getUTCSeconds()).padStart(2, '0')
 
-    return {
-      id: 7,
-      user_id: userId,
-      text: text,
-      timestamp: timestamp
-    }
-  }
+  //   return {
+  //     id: 7,
+  //     user_id: userId,
+  //     text: text,
+  //     timestamp: timestamp
+  //   }
+  // }
+
+  return fetch(`http://localhost:5000/posts/`, {method : 'post', body: JSON.stringify({
+    "user_id": `${userId}`,
+    "text": `${text}`})})
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json)
+    })
 }
