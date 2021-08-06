@@ -34,12 +34,8 @@ if (document.getElementById('finalpost') != null) {
   const postBtn = document.getElementById('finalpost')
   postBtn.addEventListener('click', async event => {
     event.preventDefault();
-    console.log(document.getElementById('message').value)
     if (document.getElementById('message').value) {
-      console.log(getUser().value)
-      console.log(document.getElementById('message').value)
-      await mockroblog.postMessage(getUser().value, document.getElementById('message').value)
-      console.log(document.getElementById('message'))
+      await mockroblog.postMessage(getUser(), document.getElementById('message').value)
       alert('message posted')
       window.location.href = 'hometimeline.html'
     } else {
@@ -139,15 +135,6 @@ if (document.querySelector('#yourTimeline-json') != null) {
         `
     )
   }
-  const followButton = document.getElementsByClassName('btn')
-  Array.from(followButton).forEach((followButton) => {
-    let lastButton = 'Unfollow'
-    followButton.addEventListener('click', function () {
-      const temporayBtn = followButton.innerHTML
-      followButton.innerHTML = lastButton
-      lastButton = temporayBtn
-    })
-  })
 }
 
 // searchtimeline
@@ -170,7 +157,7 @@ if (document.querySelector('#searchUser') != null) {
                 </div>
                 <div class="md:flex-grow">
                   <p class="leading-relaxed">${timeline[key].text}</p>
-                  <button class="btn"> Follow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
+                  <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
                 </div>
                 
               </div>
@@ -182,11 +169,19 @@ if (document.querySelector('#searchUser') != null) {
   }
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
-    let lastButton = 'Unfollow'
-    followButton.addEventListener('click', function () {
-      const temporayBtn = followButton.innerHTML
-      followButton.innerHTML = lastButton
-      lastButton = temporayBtn
+    followButton.addEventListener('click', async event => {
+      event.preventDefault();
+      let userToFollow = followButton.innerHTML.replace(" Follow / Unfollow ", "")
+      
+      let userId = getUser();
+      let userToFollowId = await mockroblog.returnId(userToFollow)
+      if(await mockroblog.checkFollowing(userId, userToFollowId)) {
+        await mockroblog.removeFollower(userId, userToFollowId)
+        alert("You have unfollowed " + userToFollow)
+      } else {
+        await mockroblog.addFollower(userId, userToFollowId)
+        alert("You have followed " + userToFollow)
+      }
     })
   })
   
@@ -195,9 +190,10 @@ if (document.querySelector('#searchUser') != null) {
 
 // home timeline
 if (document.querySelector('#homeTimeline-json') != null) {
-  const timelineArray= await mockroblog.getHomeTimeline(getUser())
-  const display = document.querySelector('#homeTimeline-json')
-  setTimeout(async function() {
+  const timelineArray = await mockroblog.getHomeTimeline(getUser())
+  console.log(timelineArray)
+  setTimeout(async function() { 
+    const display = document.querySelector('#homeTimeline-json')
     for (const timeline in timelineArray) { 
       console.log(timelineArray[timeline])
       display.innerHTML += (
@@ -215,7 +211,7 @@ if (document.querySelector('#homeTimeline-json') != null) {
                   </div>
                   <div class="md:flex-grow">
                     <p class="leading-relaxed">${timelineArray[timeline].text}</p>
-                    <button class="btn"> Follow ${await mockroblog.returnUsername(timelineArray[timeline].user_id)}</button>
+                    <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timelineArray[timeline].user_id)}</button>
                   </div>
                   
                 </div>
@@ -225,16 +221,24 @@ if (document.querySelector('#homeTimeline-json') != null) {
           `
       )
     }
-
   }, 1000);
+ 
     
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
-    let lastButton = 'Unfollow'
-    followButton.addEventListener('click', function () {
-      const temporayBtn = followButton.innerHTML
-      followButton.innerHTML = lastButton
-      lastButton = temporayBtn
+    followButton.addEventListener('click', async event => {
+      event.preventDefault();
+      let userToFollow = followButton.innerHTML.replace(" Follow / Unfollow ", "")
+      
+      let userId = getUser();
+      let userToFollowId = await mockroblog.returnId(userToFollow)
+      if(await mockroblog.checkFollowing(userId, userToFollowId)) {
+        await mockroblog.removeFollower(userId, userToFollowId)
+        alert("You have unfollowed " + userToFollow)
+      } else {
+        await mockroblog.addFollower(userId, userToFollowId)
+        alert("You have followed " + userToFollow)
+      }
     })
   })
 
@@ -242,9 +246,18 @@ if (document.querySelector('#homeTimeline-json') != null) {
   Array.from(searchUserArray).forEach((searchUser) => {
     searchUser.addEventListener('click', async event => {
       event.preventDefault();
-      await setUserSearch(await returnId(searchUser.innerHTML))
-      console.log(getUserSearch)
-      window.location.href = 'searchtimeline.html'
+      let otherUserId = await mockroblog.returnId(searchUser.innerHTML)
+
+      console.log("outside")
+      if (otherUserId === getUser()) {
+        console.log("if")
+        window.location.href = 'yourtimeline.html'
+      } else {
+        await setUserSearch(otherUserId)
+        window.location.href = 'searchtimeline.html'
+        console.log("else")
+      }
+      return false;
     })
   })
 }
@@ -271,7 +284,7 @@ if (document.querySelector('#publicTimeline-json') != null) {
                 </div>
                 <div class="md:flex-grow">
                   <p class="leading-relaxed">${timeline[key].text}</p>
-                  <button class="btn"> Follow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
+                  <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
                 </div>
                 
               </div>
@@ -283,11 +296,18 @@ if (document.querySelector('#publicTimeline-json') != null) {
   }
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
-    let lastButton = 'Unfollow'
-    followButton.addEventListener('click', function () {
-      const temporayBtn = followButton.innerHTML
-      followButton.innerHTML = lastButton
-      lastButton = temporayBtn
+    followButton.addEventListener('click', async function () {
+      let userToFollow = followButton.innerHTML.replace(" Follow / Unfollow ", "")
+      
+      let userId = getUser();
+      let userToFollowId = await mockroblog.returnId(userToFollow)
+      if(await mockroblog.checkFollowing(userId, userToFollowId)) {
+        await mockroblog.removeFollower(userId, userToFollowId)
+        alert("You have unfollowed " + userToFollow)
+      } else {
+        await mockroblog.addFollower(userId, userToFollowId)
+        alert("You have followed " + userToFollow)
+      }
     })
   })
 

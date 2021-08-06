@@ -58,6 +58,19 @@ export async function authenticateUser (username, password) {
 		  throw error;
 	});
 }
+export async function checkFollowing (userId, otherUser) {
+  return fetch(`http://localhost:5000/followers/?follower_id=${userId}&following_id=${otherUser}`, {method : 'get'})
+	.then((res) => res.json())
+	.then((json) => {
+    for (const key in json.resources) {
+      return true
+    }
+    return false
+    console.log("done")
+  }).catch((error) => {
+		  throw error;
+	});
+}
 
 export async function addFollower (userId, userIdToFollow) {
   return fetch(`http://localhost:5000/followers/`, {method : 'post', body: JSON.stringify({
@@ -70,11 +83,21 @@ export async function addFollower (userId, userIdToFollow) {
 }
 
 export async function removeFollower (userId, userIdToStopFollowing) {
-  if (userId <= 3) {
-    return {
-      message: null
-    }
-  }
+  return fetch(`http://localhost:5000/followers/?follower_id=${userId}&following_id=${userIdToStopFollowing}`, {method : 'get'})
+    .then((res) => res.json())
+    .then((json) => {
+      console.log("Remove Follower: ")
+      console.log(json)
+      for (const key in json.resources) {
+        if (json.resources[key].id) {
+          fetch(`http://localhost:5000/followers/${json.resources[key].id}`, {method : 'delete'})
+          .then((res) => res.json())
+          .then((json) => {
+            console.log(json)
+          })
+        }
+      }
+    })
 }
 
 export async function getUserTimeline (userId) {
@@ -98,27 +121,38 @@ export async function getPublicTimeline () {
 }
 
 export async function getHomeTimeline (userId) { 
-  return fetch(`http://localhost:5000/followers/?follower_id=${userId}`, {method : 'get'})
+  let posts = []
+  let promises = []
+  fetch(`http://localhost:5000/followers/?follower_id=${userId}`, {method : 'get'})
 	.then((res) => res.json())
 	.then((json) => {
     let data = json.resources
-    let posts = []
-    //data[key].following_id
+
     for(const key in data) {
-       fetch(`http://localhost:5000/posts/?user_id=${data[key].following_id}`, {method : 'get'})
-      .then((res) => res.json())
-      .then((json) => {
+       promises.push(fetch(`http://localhost:5000/posts/?user_id=${data[key].following_id}`, {method : 'get'})
+       .then((res) => res.json())
+       .then((json) => {
         for (const key in json.resources) {
             posts.push(json.resources[key])
           }
-      }).catch((error) => {
+      })
+      .catch((error) => {
         throw error;
-    });
+    })
+    )
     }
-    return posts
-  }).catch((error) => {
+  })
+  .catch((error) => {
 		  throw error;
 	});
+
+  return await Promise.all([promises]).then(([data]) => {
+    console.log("Get Home Timeline:")
+    console.log(posts)
+    console.log(data)
+    return posts
+  })
+  
 }
 
 export async function postMessage (userId, text) {
