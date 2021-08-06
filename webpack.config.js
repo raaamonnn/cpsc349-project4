@@ -5,23 +5,14 @@ module.exports = {
   output: {
     clean: true
   },
+  experiments: {
+    topLevelAwait: true
+  },
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, 'src/index.html')
 
-    }),
-    new HtmlWebpackPlugin({
-      filename: '1.html',
-      template: path.resolve(__dirname, 'src/1.html')
-    }),
-    new HtmlWebpackPlugin({
-      filename: '2.html',
-      template: path.resolve(__dirname, 'src/2.html')
-    }),
-    new HtmlWebpackPlugin({
-      filename: '3.html',
-      template: path.resolve(__dirname, 'src/3.html')
     }),
     new HtmlWebpackPlugin({
       filename: 'aboutus.html',
@@ -46,6 +37,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'yourtimeline.html',
       template: path.resolve(__dirname, 'src/yourtimeline.html')
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'searchtimeline.html',
+      template: path.resolve(__dirname, 'src/searchtimeline.html')
     })
   ],
   module: {
