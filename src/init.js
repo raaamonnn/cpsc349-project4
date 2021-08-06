@@ -6,16 +6,27 @@ window.mockroblog = mockroblog
 
 // login get and set functions to save session user
 // setter
-const setUser = function () {
-  sessionStorage.setItem('saveUser', JSON.stringify(document.getElementById('loginUsername').value))
+const setUser = function (userId) {
+  sessionStorage.setItem('saveUser', userId)
 }
+
 // getter
 const getUser = function () {
   const saved = sessionStorage.getItem('saveUser')
   if (saved) {
     return JSON.parse(saved)
   }
-  return {}
+}
+
+const setUserSearch = async function (userId) {
+  sessionStorage.setItem('saveUserSearch', JSON.stringify(userId))
+}
+
+const getUserSearch = function () {
+  const saved = sessionStorage.getItem('saveUserSearch')
+  if (saved) {
+    return JSON.parse(saved)
+  }
 }
 
 // post button on post page
@@ -45,13 +56,6 @@ if (document.getElementById('cancelpost') != null) {
     window.location.href = 'hometimeline.html'
   })
 }
-/*
-const cancelBtn = document.getElementById('cancelpost')
-cancelBtn.addEventListener('click', () => {
-  window.location.href = 'hometimeline.html'
-})
-*/
-
 // login button on register page
 if (document.getElementById('loginpage') != null) {
   const logpgBtn = document.getElementById('loginpage')
@@ -70,9 +74,11 @@ if (document.getElementById('login') != null) {
       return
     }
 
-    if (await mockroblog.authenticateUser(document.getElementById('loginUsername').value, document.getElementById('loginPassword').value) != null) {
+    let userId = await mockroblog.authenticateUser(document.getElementById('loginUsername').value, document.getElementById('loginPassword').value)
+    console.log(userId)
+    if (userId != null) {
       // save user logged in
-      setUser()
+      setUser(userId)
       window.location.href = 'hometimeline.html'
     } else {
       // display unsuccesful message
@@ -102,11 +108,13 @@ if (document.getElementById('register') != null) {
 
 // user timeline
 if (document.querySelector('#yourTimeline-json') != null) {
-  const timeline = mockroblog.getUserTimeline(getUser())
+  const timeline = await mockroblog.getUserTimeline(getUser())
+
+  console.log(timeline)
 
   const display = document.querySelector('#yourTimeline-json')
 
-  timeline.forEach(timelinePost => {
+  for(const key in timeline) {
     display.innerHTML += (
       `<link href= 
       "https://unpkg.com/tailwindcss@%5E1.0/dist/tailwind.min.css"
@@ -117,12 +125,11 @@ if (document.querySelector('#yourTimeline-json') != null) {
             <div class="-my-8 divide-y-2 divide-gray-100">
               <div class="py-8 flex flex-wrap md:flex-nowrap">
                 <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                  <span class="font-semibold title-font text-gray-700">${mockroblog.returnUsername(timelinePost.user_id)}</span>
-                  <span class="mt-1 text-gray-500 text-sm">${timelinePost.timestamp}</span>
+                  <span class="font-semibold title-font text-black-900"><p>${await mockroblog.returnUsername(timeline[key].user_id)}</p></span>
+                  <span class="mt-1 text-gray-500 text-sm">${timeline[key].timestamp}</span>
                 </div>
                 <div class="md:flex-grow">
-                  <p class="leading-relaxed">${timelinePost.text}</p>
-                  <button class="btn"> Follow ${mockroblog.returnUsername(timelinePost.user_id)}</button>
+                  <p class="leading-relaxed">${timeline[key].text}</p>
                 </div>
                 
               </div>
@@ -131,7 +138,7 @@ if (document.querySelector('#yourTimeline-json') != null) {
         </section>
         `
     )
-  })
+  }
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
     let lastButton = 'Unfollow'
@@ -143,12 +150,11 @@ if (document.querySelector('#yourTimeline-json') != null) {
   })
 }
 
-if (document.querySelector('#user1-json') != null) {
-  const timeline = mockroblog.getUserTimeline('ProfAvery')
-
-  const display = document.querySelector('#user1-json')
-
-  timeline.forEach(timelinePost => {
+// searchtimeline
+if (document.querySelector('#searchUser') != null) {
+  const timeline = await mockroblog.getUserTimeline(getUserSearch())
+  const display = document.querySelector('#searchUser')
+  for(const key in timeline) {
     display.innerHTML += (
       `<link href= 
       "https://unpkg.com/tailwindcss@%5E1.0/dist/tailwind.min.css"
@@ -159,12 +165,12 @@ if (document.querySelector('#user1-json') != null) {
             <div class="-my-8 divide-y-2 divide-gray-100">
               <div class="py-8 flex flex-wrap md:flex-nowrap">
                 <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                  <span class="font-semibold title-font text-gray-700">${mockroblog.returnUsername(timelinePost.user_id)}</span>
-                  <span class="mt-1 text-gray-500 text-sm">${timelinePost.timestamp}</span>
+                  <span class="font-semibold title-font text-black-900"><p>${await mockroblog.returnUsername(timeline[key].user_id)}</p></span>
+                  <span class="mt-1 text-gray-500 text-sm">${timeline[key].timestamp}</span>
                 </div>
                 <div class="md:flex-grow">
-                  <p class="leading-relaxed">${timelinePost.text}</p>
-                  <button class="btn"> Follow ${mockroblog.returnUsername(timelinePost.user_id)}</button>
+                  <p class="leading-relaxed">${timeline[key].text}</p>
+                  <button class="btn"> Follow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
                 </div>
                 
               </div>
@@ -173,7 +179,7 @@ if (document.querySelector('#user1-json') != null) {
         </section>
         `
     )
-  })
+  }
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
     let lastButton = 'Unfollow'
@@ -183,123 +189,45 @@ if (document.querySelector('#user1-json') != null) {
       lastButton = temporayBtn
     })
   })
+  
 }
 
-if (document.querySelector('#user2-json') != null) {
-  const timeline = mockroblog.getUserTimeline('KevinAWortman')
 
-  const display = document.querySelector('#user2-json')
-
-  timeline.forEach(timelinePost => {
-    display.innerHTML += (
-      `<link href= 
-      "https://unpkg.com/tailwindcss@%5E1.0/dist/tailwind.min.css"
-              rel="stylesheet">
-             <!--Style taken from Tailblocks-->
-      <section class="text-gray-600 body-font overflow-hidden">
-          <div class="container px-5 py-24 mx-auto">
-            <div class="-my-8 divide-y-2 divide-gray-100">
-              <div class="py-8 flex flex-wrap md:flex-nowrap">
-                <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                  <span class="font-semibold title-font text-gray-700">${mockroblog.returnUsername(timelinePost.user_id)}</span>
-                  <span class="mt-1 text-gray-500 text-sm">${timelinePost.timestamp}</span>
-                </div>
-                <div class="md:flex-grow">
-                  <p class="leading-relaxed">${timelinePost.text}</p>
-                  <button class="btn"> Follow ${mockroblog.returnUsername(timelinePost.user_id)}</button>
-                </div>
-                
-              </div>
-            </div>
-          </div>
-        </section>
-        `
-    )
-  })
-  const followButton = document.getElementsByClassName('btn')
-  Array.from(followButton).forEach((followButton) => {
-    let lastButton = 'Unfollow'
-    followButton.addEventListener('click', function () {
-      const temporayBtn = followButton.innerHTML
-      followButton.innerHTML = lastButton
-      lastButton = temporayBtn
-    })
-  })
-}
-
-if (document.querySelector('#user3-json') != null) {
-  const timeline = mockroblog.getUserTimeline('Beth_CSUF')
-
-  const display = document.querySelector('#user3-json')
-
-  timeline.forEach(timelinePost => {
-    display.innerHTML += (
-      `<link href= 
-      "https://unpkg.com/tailwindcss@%5E1.0/dist/tailwind.min.css"
-              rel="stylesheet">
-             <!--Style taken from Tailblocks-->
-      <section class="text-gray-600 body-font overflow-hidden">
-          <div class="container px-5 py-24 mx-auto">
-            <div class="-my-8 divide-y-2 divide-gray-100">
-              <div class="py-8 flex flex-wrap md:flex-nowrap">
-                <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                  <span class="font-semibold title-font text-gray-700">${mockroblog.returnUsername(timelinePost.user_id)}</span>
-                  <span class="mt-1 text-gray-500 text-sm">${timelinePost.timestamp}</span>
-                </div>
-                <div class="md:flex-grow">
-                  <p class="leading-relaxed">${timelinePost.text}</p>
-                  <button class="btn"> Follow ${mockroblog.returnUsername(timelinePost.user_id)}</button>
-                </div>
-                
-              </div>
-            </div>
-          </div>
-        </section>
-        `
-    )
-  })
-  const followButton = document.getElementsByClassName('btn')
-  Array.from(followButton).forEach((followButton) => {
-    let lastButton = 'Unfollow'
-    followButton.addEventListener('click', function () {
-      const temporayBtn = followButton.innerHTML
-      followButton.innerHTML = lastButton
-      lastButton = temporayBtn
-    })
-  })
-}
 // home timeline
 if (document.querySelector('#homeTimeline-json') != null) {
-  const timeline = mockroblog.getHomeTimeline(getUser())
-
+  const timelineArray= await mockroblog.getHomeTimeline(getUser())
   const display = document.querySelector('#homeTimeline-json')
-
-  timeline.forEach(timelinePost => {
-    display.innerHTML += (
-      `<link href= 
-      "https://unpkg.com/tailwindcss@%5E1.0/dist/tailwind.min.css"
-              rel="stylesheet">
-             <!--Style taken from Tailblocks-->
-      <section class="text-gray-600 body-font overflow-hidden">
-          <div class="container px-5 py-24 mx-auto">
-            <div class="-my-8 divide-y-2 divide-gray-100">
-              <div class="py-8 flex flex-wrap md:flex-nowrap">
-                <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                  <span class="font-semibold title-font text-gray-700"><a href="${timelinePost.user_id}.html">${mockroblog.returnUsername(timelinePost.user_id)}</span>
-                  <span class="mt-1 text-gray-500 text-sm">${timelinePost.timestamp}</span>
+  setTimeout(async function() {
+    for (const timeline in timelineArray) { 
+      console.log(timelineArray[timeline])
+      display.innerHTML += (
+        `<link href= 
+        "https://unpkg.com/tailwindcss@%5E1.0/dist/tailwind.min.css"
+                rel="stylesheet">
+               <!--Style taken from Tailblocks-->
+        <section class="text-gray-600 body-font overflow-hidden">
+            <div class="container px-5 py-24 mx-auto">
+              <div class="-my-8 divide-y-2 divide-gray-100">
+                <div class="py-8 flex flex-wrap md:flex-nowrap">
+                  <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                    <span class="font-semibold title-font text-black-900"><a class="searchUser" href="">${await mockroblog.returnUsername(timelineArray[timeline].user_id)}</span>
+                    <span class="mt-1 text-gray-500 text-sm">${timelineArray[timeline].timestamp}</span>
+                  </div>
+                  <div class="md:flex-grow">
+                    <p class="leading-relaxed">${timelineArray[timeline].text}</p>
+                    <button class="btn"> Follow ${await mockroblog.returnUsername(timelineArray[timeline].user_id)}</button>
+                  </div>
+                  
                 </div>
-                <div class="md:flex-grow">
-                  <p class="leading-relaxed">${timelinePost.text}</p>
-                  <button class="btn"> Follow ${mockroblog.returnUsername(timelinePost.user_id)}</button>
-                </div>
-                
               </div>
             </div>
-          </div>
-        </section>
-        `
-    )
-  })
+          </section>
+          `
+      )
+    }
+
+  }, 100);
+    
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
     let lastButton = 'Unfollow'
@@ -307,17 +235,27 @@ if (document.querySelector('#homeTimeline-json') != null) {
       const temporayBtn = followButton.innerHTML
       followButton.innerHTML = lastButton
       lastButton = temporayBtn
+    })
+  })
+
+  const searchUserArray = document.getElementsByClassName('searchUser')
+  Array.from(searchUserArray).forEach((searchUser) => {
+    searchUser.addEventListener('click', async event => {
+      event.preventDefault();
+      await setUserSearch(await returnId(searchUser.innerHTML))
+      console.log(getUserSearch)
+      window.location.href = 'searchtimeline.html'
     })
   })
 }
 
 // public timeline
 if (document.querySelector('#publicTimeline-json') != null) {
-  const timeline = mockroblog.getPublicTimeline()
-
+  const timeline = await mockroblog.getPublicTimeline()
+  console.log(timeline)
   const display = document.querySelector('#publicTimeline-json')
 
-  timeline.forEach(timelinePost => {
+  for(const key in timeline) {
     display.innerHTML += (
       `<link href= 
       "https://unpkg.com/tailwindcss@%5E1.0/dist/tailwind.min.css"
@@ -328,12 +266,12 @@ if (document.querySelector('#publicTimeline-json') != null) {
             <div class="-my-8 divide-y-2 divide-gray-100">
               <div class="py-8 flex flex-wrap md:flex-nowrap">
                 <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                  <span class="font-semibold title-font text-black-900"><a href="${timelinePost.user_id}.html">${mockroblog.returnUsername(timelinePost.user_id)}</span>
-                  <span class="mt-1 text-gray-500 text-sm">${timelinePost.timestamp}</span>
+                  <span class="font-semibold title-font text-black-900"><a class="searchUser" href="">${await mockroblog.returnUsername(timeline[key].user_id)}</span>
+                  <span class="mt-1 text-gray-500 text-sm">${timeline[key].timestamp}</span>
                 </div>
                 <div class="md:flex-grow">
-                  <p class="leading-relaxed">${timelinePost.text}</p>
-                  <button class="btn"> Follow ${mockroblog.returnUsername(timelinePost.user_id)}</button>
+                  <p class="leading-relaxed">${timeline[key].text}</p>
+                  <button class="btn"> Follow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
                 </div>
                 
               </div>
@@ -342,7 +280,7 @@ if (document.querySelector('#publicTimeline-json') != null) {
         </section>
         `
     )
-  })
+  }
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
     let lastButton = 'Unfollow'
@@ -350,6 +288,21 @@ if (document.querySelector('#publicTimeline-json') != null) {
       const temporayBtn = followButton.innerHTML
       followButton.innerHTML = lastButton
       lastButton = temporayBtn
+    })
+  })
+
+  const searchUserArray = document.getElementsByClassName('searchUser')
+  Array.from(searchUserArray).forEach((searchUser) => {
+    searchUser.addEventListener('click', async event => {
+      event.preventDefault();
+      let otherUserId = await mockroblog.returnId(searchUser.innerHTML)
+
+      if (otherUserId === getUser()) {
+        window.location.href = 'yourtimeline.html'
+      } else {
+        await setUserSearch(otherUserId)
+        window.location.href = 'searchtimeline.html'
+      }
     })
   })
 }

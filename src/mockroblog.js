@@ -1,15 +1,6 @@
 /* Mockroblog client API stubs for prototyping */
 
-export function createUser (username, email, password) {
-  // if (['ProfAvery', 'KevinAWortman', 'Beth_CSUF'].indexOf(username) < 0) {
-  //   return {
-  //     id: 4,
-  //     username: username,
-  //     email: email,
-  //     password: password
-  //   }
-  // }
-
+export async function createUser (username, email, password) {
   return fetch(`http://localhost:5000/users/`, {method : 'post', body: JSON.stringify({
     "username": `${username}`,
     "email": `${email}`,
@@ -25,31 +16,50 @@ export function createUser (username, email, password) {
 	});
 }
 
-export function returnUsername (userId) {
-  if (userId === 1) {
-    return 'ProfAvery'
-  } else if (userId === 2) {
-    return 'KevinAWortman'
-  } else if (userId === 3) {
-    return 'Beth_CSUF'
-  }
-}
-
-export function authenticateUser (username, password) {
-  return fetch(`http://localhost:5000/users/?username=${username}&password=${password}`, {method : 'get'})
-	.then((res) => res.text())
-	.then((text) => {
-    if(!text.includes("username")) {
-      return null;
-    } else {
-      return text;
+export async function returnId (username) {
+  return fetch(`http://localhost:5000/users/?username=${username}`, {method : 'get'})
+	.then((res) => res.json())
+	.then((json) => {
+    for (const key in json.resources) {
+      if (json.resources[key].id) {
+        return json.resources[key].id
+      }
     }
   }).catch((error) => {
 		  throw error;
 	});
 }
 
-export function addFollower (userId, userIdToFollow) {
+export async function returnUsername (userId) {
+  return fetch(`http://localhost:5000/users/?id=${userId}`, {method : 'get'})
+	.then((res) => res.json())
+	.then((json) => {
+    for (const key in json.resources) {
+      if (json.resources[key].username) {
+        return json.resources[key].username
+      }
+    }
+  }).catch((error) => {
+		  throw error;
+	});
+}
+
+export async function authenticateUser (username, password) {
+  return fetch(`http://localhost:5000/users/?username=${username}&password=${password}`, {method : 'get'})
+	.then((res) => res.json())
+	.then((json) => {
+    for (const key in json.resources) {
+      if (json.resources[key].id) {
+        return json.resources[key].id
+      }
+    }
+    return null
+  }).catch((error) => {
+		  throw error;
+	});
+}
+
+export async function addFollower (userId, userIdToFollow) {
   return fetch(`http://localhost:5000/followers/`, {method : 'post', body: JSON.stringify({
     "follower_id": `${userId}`,
     "following_id": `${userIdToFollow}`})})
@@ -57,17 +67,9 @@ export function addFollower (userId, userIdToFollow) {
     .then((json) => {
       console.log(json)
     })
-
-  // if (userId > 3) {
-  //   return {
-  //     id: 6,
-  //     follower_id: userId,
-  //     following_id: userIdToFollow
-  //   }
-  // }
 }
 
-export function removeFollower (userId, userIdToStopFollowing) {
+export async function removeFollower (userId, userIdToStopFollowing) {
   if (userId <= 3) {
     return {
       message: null
@@ -75,157 +77,51 @@ export function removeFollower (userId, userIdToStopFollowing) {
   }
 }
 
-export function getUserTimeline (username) {
-  switch (username) {
-    case 'ProfAvery':
-      return [
-        {
-          id: 2,
-          user_id: 1,
-          text: 'FYI: https://www.levels.fyi/still-hiring/',
-          timestamp: '2021-07-24 05:11:12'
-        },
-        {
-          id: 3,
-          user_id: 1,
-          text: 'Yes, the header file ends in .h. C++ is for masochists.',
-          timestamp: '2021-07-24 05:09:12'
-        },
-        {
-          id: 1,
-          user_id: 1,
-          text: 'Meanwhile, at the R1 institution down the street... https://uci.edu/coronavirus/messages/200710-sanitizer-recall.php',
-          timestamp: '2021-07-24 05:06:12'
-        }
-      ]
-    case 'KevinAWortman':
-      return [
-        {
-          id: 5,
-          user_id: 2,
-          text: "I keep seeing video from before COVID, of people not needing to mask or distance, and doing something like waiting in line at Burger King. YOU'RE WASTING IT!",
-          timestamp: '2021-07-24 05:10:12'
-        },
-        {
-          id: 4,
-          user_id: 2,
-          text: 'If academia were a video game, then a 2.5 hour administrative meeting that votes to extend time 15 minutes is a fatality. FINISH HIM',
-          timestamp: '2021-07-24 05:08:12'
-        }
-      ]
-    case 'Beth_CSUF':
-      return [
-        {
-          id: 6,
-          user_id: 3,
-          text: '#cpsc315 #engr190w NeurIPS is $25 for students and $100 for non-students this year! https://medium.com/@NeurIPSConf/neurips-registration-opens-soon-67111581de99',
-          timestamp: '2021-07-24 05:07:12'
-        }
-      ]
-    default:
-      return []
-  }
+export async function getUserTimeline (userId) {
+  return fetch(`http://localhost:5000/posts/?user_id=${userId}`, {method : 'get'})
+	.then((res) => res.json())
+	.then((json) => {
+    return json.resources
+  }).catch((error) => {
+		  throw error;
+	});
 }
 
-export function getPublicTimeline () {
-  return [
-    {
-      id: 2,
-      user_id: 1,
-      text: 'FYI: https://www.levels.fyi/still-hiring/',
-      timestamp: '2021-07-24 05:11:12'
-    },
-    {
-      id: 5,
-      user_id: 2,
-      text: "I keep seeing video from before COVID, of people not needing to mask or distance, and doing something like waiting in line at Burger King. YOU'RE WASTING IT!",
-      timestamp: '2021-07-24 05:10:12'
-    },
-    {
-      id: 3,
-      user_id: 1,
-      text: 'Yes, the header file ends in .h. C++ is for masochists.',
-      timestamp: '2021-07-24 05:09:12'
-    },
-    {
-      id: 4,
-      user_id: 2,
-      text: 'If academia were a video game, then a 2.5 hour administrative meeting that votes to extend time 15 minutes is a fatality. FINISH HIM',
-      timestamp: '2021-07-24 05:08:12'
-    },
-    {
-      id: 6,
-      user_id: 3,
-      text: '#cpsc315 #engr190w NeurIPS is $25 for students and $100 for non-students this year! https://medium.com/@NeurIPSConf/neurips-registration-opens-soon-67111581de99',
-      timestamp: '2021-07-24 05:07:12'
-    },
-    {
-      id: 1,
-      user_id: 1,
-      text: 'Meanwhile, at the R1 institution down the street... https://uci.edu/coronavirus/messages/200710-sanitizer-recall.php',
-      timestamp: '2021-07-24 05:06:12'
+export async function getPublicTimeline () { 
+  return fetch(`http://localhost:5000/posts/`, {method : 'get'})
+	.then((res) => res.json())
+	.then((json) => {
+    return json.resources
+  }).catch((error) => {
+		  throw error;
+	});
+}
+
+export async function getHomeTimeline (userId) { 
+  return fetch(`http://localhost:5000/followers/?follower_id=${userId}`, {method : 'get'})
+	.then((res) => res.json())
+	.then((json) => {
+    let data = json.resources
+    let posts = []
+    //data[key].following_id
+    for(const key in data) {
+       fetch(`http://localhost:5000/posts/?user_id=${data[key].following_id}`, {method : 'get'})
+      .then((res) => res.json())
+      .then((json) => {
+        for (const key in json.resources) {
+            posts.push(json.resources[key])
+          }
+      }).catch((error) => {
+        throw error;
+    });
     }
-  ]
+    return posts
+  }).catch((error) => {
+		  throw error;
+	});
 }
 
-export function getHomeTimeline (username) {
-  switch (username) {
-    case 'ProfAvery':
-      return [
-        {
-          id: 5,
-          user_id: 2,
-          text: "I keep seeing video from before COVID, of people not needing to mask or distance, and doing something like waiting in line at Burger King. YOU'RE WASTING IT!",
-          timestamp: '2021-07-24 05:10:12'
-        },
-        {
-          id: 4,
-          user_id: 2,
-          text: 'If academia were a video game, then a 2.5 hour administrative meeting that votes to extend time 15 minutes is a fatality. FINISH HIM',
-          timestamp: '2021-07-24 05:08:12'
-        },
-        {
-          id: 6,
-          user_id: 3,
-          text: '#cpsc315 #engr190w NeurIPS is $25 for students and $100 for non-students this year! https://medium.com/@NeurIPSConf/neurips-registration-opens-soon-67111581de99',
-          timestamp: '2021-07-24 05:07:12'
-        }
-      ]
-    case 'KevinAWortman':
-      return [
-        {
-          id: 2,
-          user_id: 1,
-          text: 'FYI: https://www.levels.fyi/still-hiring/',
-          timestamp: '2021-07-24 05:11:12'
-        },
-        {
-          id: 3,
-          user_id: 1,
-          text: 'Yes, the header file ends in .h. C++ is for masochists.',
-          timestamp: '2021-07-24 05:09:12'
-        },
-        {
-          id: 6,
-          user_id: 3,
-          text: '#cpsc315 #engr190w NeurIPS is $25 for students and $100 for non-students this year! https://medium.com/@NeurIPSConf/neurips-registration-opens-soon-67111581de99',
-          timestamp: '2021-07-24 05:07:12'
-        },
-        {
-          id: 1,
-          user_id: 1,
-          text: 'Meanwhile, at the R1 institution down the street... https://uci.edu/coronavirus/messages/200710-sanitizer-recall.php',
-          timestamp: '2021-07-24 05:06:12'
-        }
-      ]
-    case 'Beth_CSUF':
-      return getUserTimeline('KevinAWortman')
-    default:
-      return []
-  }
-}
-
-export function postMessage (userId, text) {
+export async function postMessage (userId, text) {
   // if (userId > 3) {
   //   const now = new Date()
   //   const timestamp =
