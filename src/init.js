@@ -38,7 +38,7 @@ if (document.getElementById('finalpost') != null) {
     if (document.getElementById('message').value) {
       console.log(getUser().value)
       console.log(document.getElementById('message').value)
-      await postMessage(getUser().value, document.getElementById('message').value)
+      await mockroblog.postMessage(getUser().value, document.getElementById('message').value)
       console.log(document.getElementById('message'))
       alert('message posted')
       window.location.href = 'hometimeline.html'
@@ -226,7 +226,7 @@ if (document.querySelector('#homeTimeline-json') != null) {
       )
     }
 
-  }, 100);
+  }, 1000);
     
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
