@@ -44,6 +44,23 @@ if (document.getElementById('finalpost') != null) {
   })
 }
 
+//message button foot
+if (document.getElementById('sendMessage') != null){
+  const msgBtn = document.getElementById('sendMessage')
+    msgBtn.addEventListener('click', function () {
+    window.location.href = 'directmessage.html'
+  })
+}
+
+//post button foot
+//message button foot
+if (document.getElementById('postBut') != null){
+  const pstBtn = document.getElementById('postBut')
+    pstBtn.addEventListener('click', function () {
+    window.location.href = 'post.html'
+  })
+}
+
 // cancel button on post page
 if (document.getElementById('cancelpost') != null) {
   const postBtn = document.getElementById('cancelpost')

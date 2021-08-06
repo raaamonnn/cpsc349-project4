@@ -19,6 +19,10 @@ module.exports = {
       template: path.resolve(__dirname, 'src/aboutus.html')
     }),
     new HtmlWebpackPlugin({
+      filename: 'directmessage.html',
+      template: path.resolve(__dirname, 'src/directmessage.html')
+    }),
+    new HtmlWebpackPlugin({
       filename: 'hometimeline.html',
       template: path.resolve(__dirname, 'src/hometimeline.html')
     }),
@@ -70,5 +74,5 @@ module.exports = {
     ]
   },
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'inline-source-map'
 }

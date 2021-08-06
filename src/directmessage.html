@@ -19,8 +19,17 @@
       </nav>
     </div>
   </header>
-  <pre id="homeTimeline-json"></pre>
-    <footer
+  <div class="bg-gray-300 text-3xl text-gray-600 text-center border-t-4 fixed inset-x-0 p-4">
+  <label class="block">
+    <span class="text-gray-700">Message</span>
+    <textarea class="form-textarea mt-1 block w-full" rows="3" placeholder="Enter your message here"></textarea>
+  </label>
+  <div class="pt-6">
+  <button class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full" id="sendMessage">Send</button>
+<button class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full" id="cancelMessage">Cancel</button>
+</div>
+</div>
+  <footer
       class="bg-gray-300
              text-3xl text-gray-600 text-center
              border-t-4
@@ -29,18 +38,14 @@
              bottom-0
              p-4">
       <!--<button class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full">Post </button> -->
-      <div>
-        <!--<form action="post.html">
-            
-        </form>
-        <input class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full" type="submit" value=" Post" />
-            <input id = "sendMessage" class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full" type="submit" value=" Message" />-->
-          <button id="postBut" class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full">Post</button>
-          <button id="sendMessage" class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full">Message</button>
-    </div>
     </footer>
   </body>
   <script>
-    
+    /*
+    const postBtn = document.getElementById('sendMessage')
+    postBtn.addEventListener('click', function () {
+    window.location.href = 'directmessage.html'
+  })
+  */
   </script>
 </html>

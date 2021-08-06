@@ -1,62 +1,65 @@
 /* Mockroblog client API stubs for prototyping */
 
 export async function createUser (username, email, password) {
-  return fetch(`http://localhost:5000/users/`, {method : 'post', body: JSON.stringify({
-    "username": `${username}`,
-    "email": `${email}`,
-    "password": `${password}`})
+  return fetch('http://localhost:5000/users/', {
+    method: 'post',
+    body: JSON.stringify({
+      username: `${username}`,
+      email: `${email}`,
+      password: `${password}`
+    })
   })
     .then((res) => res.json())
     .then((json) => {
       console.log(json)
       return json
     }).catch((error) => {
-		  console.log("User already exists")
-      return null;
-	});
+		  console.log('User already exists')
+      return null
+    })
 }
 
 export async function returnId (username) {
-  return fetch(`http://localhost:5000/users/?username=${username}`, {method : 'get'})
-	.then((res) => res.json())
-	.then((json) => {
-    for (const key in json.resources) {
-      if (json.resources[key].id) {
-        return json.resources[key].id
+  return fetch(`http://localhost:5000/users/?username=${username}`, { method: 'get' })
+    .then((res) => res.json())
+    .then((json) => {
+      for (const key in json.resources) {
+        if (json.resources[key].id) {
+          return json.resources[key].id
+        }
       }
-    }
-  }).catch((error) => {
-		  throw error;
-	});
+    }).catch((error) => {
+		  throw error
+    })
 }
 
 export async function returnUsername (userId) {
-  return fetch(`http://localhost:5000/users/?id=${userId}`, {method : 'get'})
-	.then((res) => res.json())
-	.then((json) => {
-    for (const key in json.resources) {
-      if (json.resources[key].username) {
-        return json.resources[key].username
+  return fetch(`http://localhost:5000/users/?id=${userId}`, { method: 'get' })
+    .then((res) => res.json())
+    .then((json) => {
+      for (const key in json.resources) {
+        if (json.resources[key].username) {
+          return json.resources[key].username
+        }
       }
-    }
-  }).catch((error) => {
-		  throw error;
-	});
+    }).catch((error) => {
+		  throw error
+    })
 }
 
 export async function authenticateUser (username, password) {
-  return fetch(`http://localhost:5000/users/?username=${username}&password=${password}`, {method : 'get'})
-	.then((res) => res.json())
-	.then((json) => {
-    for (const key in json.resources) {
-      if (json.resources[key].id) {
-        return json.resources[key].id
+  return fetch(`http://localhost:5000/users/?username=${username}&password=${password}`, { method: 'get' })
+    .then((res) => res.json())
+    .then((json) => {
+      for (const key in json.resources) {
+        if (json.resources[key].id) {
+          return json.resources[key].id
+        }
       }
-    }
-    return null
-  }).catch((error) => {
-		  throw error;
-	});
+      return null
+    }).catch((error) => {
+		  throw error
+    })
 }
 export async function checkFollowing (userId, otherUser) {
   return fetch(`http://localhost:5000/followers/?follower_id=${userId}&following_id=${otherUser}`, {method : 'get'})
@@ -73,9 +76,13 @@ export async function checkFollowing (userId, otherUser) {
 }
 
 export async function addFollower (userId, userIdToFollow) {
-  return fetch(`http://localhost:5000/followers/`, {method : 'post', body: JSON.stringify({
-    "follower_id": `${userId}`,
-    "following_id": `${userIdToFollow}`})})
+  return fetch('http://localhost:5000/followers/', {
+    method: 'post',
+    body: JSON.stringify({
+      follower_id: `${userId}`,
+      following_id: `${userIdToFollow}`
+    })
+  })
     .then((res) => res.json())
     .then((json) => {
       console.log(json)
@@ -101,23 +108,23 @@ export async function removeFollower (userId, userIdToStopFollowing) {
 }
 
 export async function getUserTimeline (userId) {
-  return fetch(`http://localhost:5000/posts/?user_id=${userId}`, {method : 'get'})
-	.then((res) => res.json())
-	.then((json) => {
-    return json.resources
-  }).catch((error) => {
-		  throw error;
-	});
+  return fetch(`http://localhost:5000/posts/?user_id=${userId}`, { method: 'get' })
+    .then((res) => res.json())
+    .then((json) => {
+      return json.resources
+    }).catch((error) => {
+		  throw error
+    })
 }
 
-export async function getPublicTimeline () { 
-  return fetch(`http://localhost:5000/posts/`, {method : 'get'})
-	.then((res) => res.json())
-	.then((json) => {
-    return json.resources
-  }).catch((error) => {
-		  throw error;
-	});
+export async function getPublicTimeline () {
+  return fetch('http://localhost:5000/posts/', { method: 'get' })
+    .then((res) => res.json())
+    .then((json) => {
+      return json.resources
+    }).catch((error) => {
+		  throw error
+    })
 }
 
 export async function getHomeTimeline (userId) { 
@@ -156,9 +163,13 @@ export async function getHomeTimeline (userId) {
 }
 
 export async function postMessage (userId, text) {
-  return fetch(`http://localhost:5000/posts/`, {method : 'post', body: JSON.stringify({
-    "user_id": `${userId}`,
-    "text": `${text}`})})
+  return fetch('http://localhost:5000/posts/', {
+    method: 'post',
+    body: JSON.stringify({
+      user_id: `${userId}`,
+      text: `${text}`
+    })
+  })
     .then((res) => res.json())
     .then((json) => {
       console.log(json)
