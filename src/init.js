@@ -61,6 +61,48 @@ if (document.getElementById('postBut') != null){
   })
 }
 
+    /*
+    button.addEventListener("click", function(){
+      let newMessage = document.createElement("li");
+      newMessage.innerHTML = textbox.value;
+      messages.appendChild(newMessage);
+      textbox.value = "";
+    })
+    */
+   /*return fetch(`http://localhost:5000/posts/?follower_id=${userId}&following_id=${userIdToStopFollowing}`, { method: 'get' })
+      //direct_messages(from_user_id, to_user_id, in_reply_to_id, timestamp, text)
+      .then((res) => res.json())
+    .then((json) => {
+      console.log(json)
+    })
+}
+    */
+
+//send message on DM page
+    if (document.getElementById('sendMsg') != null) {
+    let messages = document.getElementById("messages");
+    let textbox = document.getElementById("inputMsg");
+    const sndBtn = document.getElementById('sendMsg')
+    sndBtn.addEventListener('click', function() {
+    if (document.getElementById('inputMsg').value) {
+      let newMessage = document.createElement("li");
+      newMessage.innerHTML = 'You:  ' + textbox.value;
+      messages.appendChild(newMessage);
+      textbox.value = "";
+
+    } else {
+      alert('Please add a message')
+    }
+  })
+}
+//cancel message on DM page
+    if (document.getElementById('cancelMessage') != null){
+  const msgBtn = document.getElementById('cancelMessage')
+    msgBtn.addEventListener('click', function () {
+    window.location.href = 'hometimeline.html'
+  })
+}
+
 // cancel button on post page
 if (document.getElementById('cancelpost') != null) {
   const postBtn = document.getElementById('cancelpost')
