@@ -78,11 +78,62 @@ if (document.getElementById('postBut') != null){
 }
     */
 
+/*
+if (document.querySelector('#publicTimeline-json') != null) {
+  const timeline = await mockroblog.getPublicTimeline()
+  console.log(timeline)
+  const display = document.querySelector('#publicTimeline-json')
+
+  for(const key in timeline) {
+    display.innerHTML += (
+      `<link href= 
+      "https://unpkg.com/tailwindcss@%5E1.0/dist/tailwind.min.css"
+              rel="stylesheet">
+             <!--Style taken from Tailblocks-->
+      <section class="text-gray-600 body-font overflow-hidden">
+          <div class="container px-5 py-24 mx-auto">
+            <div class="-my-8 divide-y-2 divide-gray-100">
+              <div class="py-8 flex flex-wrap md:flex-nowrap">
+                <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                  <span class="font-semibold title-font text-black-900"><a class="searchUser" href="">${await mockroblog.returnUsername(timeline[key].user_id)}</span>
+                  <span class="mt-1 text-gray-500 text-sm">${timeline[key].timestamp}</span>
+                </div>
+                <div class="md:flex-grow">
+                  <p class="leading-relaxed">${timeline[key].text}</p>
+                  <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </section>
+        `
+    )
+  }
+*/
+
+//receive DM on page
+if (document.querySelector('#directMessage-json') != null) {
+  const timeline = await mockroblog.receiveDM(3,1)
+  setTimeout(async function() { 
+  let firstMessage = document.createElement("li");
+      //firstMessage.innerHTML = 'You:  ' + textbox.value;
+      //messages.appendChild(newMessage);
+  console.log(timeline)
+  for(const key in timeline) {
+    firstMessage.innerHTML += (
+      `${await mockroblog.returnUsername(timeline[key].from_user_id)}<br>
+      ${timeline[key].text}
+        `
+      )
+    }
+  }, 1000);
+}
 //send message on DM page
     if (document.getElementById('sendMsg') != null) {
     let messages = document.getElementById("messages");
     let textbox = document.getElementById("inputMsg");
-    const sndBtn = document.getElementById('sendMsg')
+    const sndBtn = document.getElementById('sendMsg');
     sndBtn.addEventListener('click', function() {
     if (document.getElementById('inputMsg').value) {
       let newMessage = document.createElement("li");

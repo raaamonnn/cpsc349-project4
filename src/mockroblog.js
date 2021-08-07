@@ -59,7 +59,7 @@ export async function authenticateUser (username, password) {
       return null
     }).catch((error) => {
 		  throw error
-    });
+    })
 }
 export async function checkFollowing (userId, otherUser) {
   return fetch(`http://localhost:5000/followers/?follower_id=${userId}&following_id=${otherUser}`, { method: 'get' })
@@ -69,10 +69,10 @@ export async function checkFollowing (userId, otherUser) {
         return true
       }
       return false
-      console.log('done')
+      // console.log('done')
     }).catch((error) => {
 		  throw error
-    });
+    })
 }
 
 export async function addFollower (userId, userIdToFollow) {
@@ -160,7 +160,7 @@ export async function getHomeTimeline (userId) {
             }
           })
           .catch((error) => {
-            throw error;
+            throw error
           })
         )
       }
@@ -190,57 +190,21 @@ export async function postMessage (userId, text) {
       console.log(json)
     })
 }
-/*
-export async function receiveDM (from_user_id, to_user_id, text) {
-  //return fetch(`http://localhost:5000/direct_messages/?from_user_id=${from_user_id}&to_user_id=${to_user_id}&in_reply to_id=${in_reply_to_id}&timestamp=${timestamp}&text=${text}`, { method: 'get' })
-  //{"from_user_id":1,"id":2,"in_reply_to_id":1,"text":"Thanks! Going to share this with Dr. Ryu.","timestamp":"2021-08-05 03:23:29","to_user_id":3}]}
 
+export async function receiveDM (from_user_id, to_user_id) {
+  // return fetch(`http://localhost:5000/direct_messages/?from_user_id=${from_user_id}&to_user_id=${to_user_id}&in_reply to_id=${in_reply_to_id}&timestamp=${timestamp}&text=${text}`, { method: 'get' })
+  // {"from_user_id":1,"id":2,"in_reply_to_id":1,"text":"Thanks! Going to share this with Dr. Ryu.","timestamp":"2021-08-05 03:23:29","to_user_id":3}]}
   /*
+  const response = await fetch(`http://localhost:5000/direct_messages/?from_user_id=${from_user_id}&to_user_id=${to_user_id}`, { method: 'get' })
+  const json = await response.json()
+  return json.resources
+  */
+  
   return fetch(`http://localhost:5000/direct_messages/?from_user_id=${from_user_id}&to_user_id=${to_user_id}`, { method: 'get' })
     .then((res) => res.json())
     .then((json) => {
-      console.log(json)
-      for (const key in json.resources) {
-        if (json.resources[key].id) {
-          fetch(`http://localhost:5000/direct_messages/${json.resources[key].id}`, { method: 'post' })
-            .then((res) => res.json())
-            .then((json) => {
-              console.log(json)
-            })
-        }
-      }
-    })
-
-    const posts = []
-    const promises = []
-    fetch(`http://localhost:5000/followers/?follower_id=${userId}`, { method: 'get' })
-      .then((res) => res.json())
-      .then((json) => {
-        const data = json.resources
-
-        for (const key in data) {
-          promises.push(fetch(`http://localhost:5000/posts/?user_id=${data[key].following_id}`, { method: 'get' })
-            .then((res) => res.json())
-            .then((json) => {
-              for (const key in json.resources) {
-                posts.push(json.resources[key])
-              }
-            })
-            .catch((error) => {
-              throw error
-            })
-          )
-        }
-      })
-      .catch((error) => {
-        throw error
-      })
-
-    return await Promise.all([promises]).then(([data]) => {
-      console.log('Get Home Timeline:')
-      console.log(posts)
-      console.log(data)
-      return posts
+      return json.resources
+    }).catch((error) => {
+      throw error
     })
 }
-*/
