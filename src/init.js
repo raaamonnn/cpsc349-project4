@@ -114,6 +114,7 @@ if (document.querySelector('#publicTimeline-json') != null) {
 
 //receive DM on page
 if (document.querySelector('#directMessage-json') != null) {
+  let messages = document.getElementById("messages");
   const timeline = await mockroblog.receiveDM(3,1)
   setTimeout(async function() { 
   let firstMessage = document.createElement("li");
@@ -122,11 +123,13 @@ if (document.querySelector('#directMessage-json') != null) {
   console.log(timeline)
   for(const key in timeline) {
     firstMessage.innerHTML += (
-      `${await mockroblog.returnUsername(timeline[key].from_user_id)}<br>
-      ${timeline[key].text}
+      `${await mockroblog.returnUsername(timeline[key].from_user_id)}: <br>
+      ${timeline[key].text}<br>
+       <br>
         `
       )
     }
+    messages.appendChild(firstMessage);
   }, 1000);
 }
 //send message on DM page
@@ -137,7 +140,7 @@ if (document.querySelector('#directMessage-json') != null) {
     sndBtn.addEventListener('click', function() {
     if (document.getElementById('inputMsg').value) {
       let newMessage = document.createElement("li");
-      newMessage.innerHTML = 'You:  ' + textbox.value;
+      newMessage.innerHTML = 'You:  <br>' + textbox.value + '<br><br>';
       messages.appendChild(newMessage);
       textbox.value = "";
 
