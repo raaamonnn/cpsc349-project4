@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Mockroblog</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+<body class="bg-blue-200">
+  <header class="bg-yellow-200 text-gray-600 body-font">
+    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+      <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+        <span class="ml-3 text-xl">Mockroblog - Direct Message</span>
+      </a>
+    </div>
+  </header>
+  </div>
+  <div class="relative mb-4">
+  <label for="dmOtherUser" class="leading-7 text-sm text-gray-600">Username</label>
+  <input type="text" id="dmOtherUser" name="text" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+  <button id="searchOtherUser" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+    Search
+  </button>  
+  </div>
+  <pre id="directMessage-json">
+  </pre>
+  <ul id="messages"></ul>
+  <div class="bg-gray-300 text-3xl text-gray-600 text-center border-t-4 fixed inset-x-0 p-4">
+  <label class="block">
+    <span class="text-gray-700">Message</span>
+    <textarea id="inputMsg" class="form-textarea mt-1 block w-full" rows="3" placeholder="Enter your message here"></textarea>
+  </label>
+  <div class="pt-6">
+    <button id="sendMsg" class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full">Send</button>
+    <button id="cancelMessage" class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full">Cancel</button>
+  </div>
+</div>
+  <footer
+      class="bg-gray-300
+             text-3xl text-gray-600 text-center
+             border-t-4
+             fixed
+             inset-x-0
+             bottom-0
+             p-4">
+      <!--<button class="bg-gray-800 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-full">Post </button> -->
+    </footer>
+  </body>
+  <script>
+  </script>
+</html>

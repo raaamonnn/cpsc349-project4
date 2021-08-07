@@ -20,10 +20,10 @@ async function search (term = '') {
   resultDiv.hidden = !term
 }
 
-searchForm.addEventListener('submit', (event) => {
-  event.preventDefault()
-})
+// searchForm.addEventListener('submit', (event) => {
+//   event.preventDefault()
+// })
 
-keyword.addEventListener('input', (event) => {
-  search(keyword.value)
-})
+// keyword.addEventListener('input', (event) => {
+//   search(keyword.value)
+// })
