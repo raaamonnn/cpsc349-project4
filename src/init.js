@@ -112,11 +112,24 @@ if (document.querySelector('#publicTimeline-json') != null) {
   }
 */
 
-//receive DM on page
+
+if (document.getElementById('dmOtherUser')) {
+  const searchButton = document.getElementById('searchOtherUser')
+  searchButton.addEventListener('click', async event => {
+    event.preventDefault()
+
+    const userToSearch = document.getElementById('dmOtherUser').value
+    
+    //receive DM on page
 if (document.querySelector('#directMessage-json') != null) {
   let messages = document.getElementById("messages");
-  const timeline = await mockroblog.receiveDM(3,1)
-  setTimeout(async function() { 
+  const timeline = await fetch(`http://localhost:5000/direct_messages/?from_user_id=${await mockroblog.returnId(userToSearch)}&to_user_id=${getUser()}`, { method: 'get' })
+  .then((res) => res.json())
+  .then((json) => {
+    return json.resources
+  }).catch((error) => {
+    throw error
+  })
   let firstMessage = document.createElement("li");
       //firstMessage.innerHTML = 'You:  ' + textbox.value;
       //messages.appendChild(newMessage);
@@ -130,15 +143,35 @@ if (document.querySelector('#directMessage-json') != null) {
       )
     }
     messages.appendChild(firstMessage);
-  }, 1000);
 }
-//send message on DM page
-    if (document.getElementById('sendMsg') != null) {
+  })
+
+  //send message on DM page
+  if (document.getElementById('sendMsg') != null) {
     let messages = document.getElementById("messages");
     let textbox = document.getElementById("inputMsg");
     const sndBtn = document.getElementById('sendMsg');
-    sndBtn.addEventListener('click', function() {
+    sndBtn.addEventListener('click', async event => {
+      event.preventDefault()
     if (document.getElementById('inputMsg').value) {
+      
+    const userToSearch = document.getElementById('dmOtherUser').value
+    console.log("ASDSADSD")
+    await fetch(`http://localhost:5000/direct_messages/`, {
+    method: 'post',
+    // follower_id=${getUser()}&following_id=${await mockroblog.returnId(userToSearch)}`
+    body: JSON.stringify({
+      from_user_id: `${getUser()}`,
+      to_user_id: `${await mockroblog.returnId(userToSearch)}`,
+      text: `${textbox.value}`
+    })
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json)
+    })
+
+
       let newMessage = document.createElement("li");
       newMessage.innerHTML = 'You:  <br>' + textbox.value + '<br><br>';
       messages.appendChild(newMessage);
@@ -149,6 +182,8 @@ if (document.querySelector('#directMessage-json') != null) {
     }
   })
 }
+}
+
 //cancel message on DM page
     if (document.getElementById('cancelMessage') != null){
   const msgBtn = document.getElementById('cancelMessage')
@@ -303,8 +338,11 @@ if (document.querySelector('#searchUser') != null) {
 
 // home timeline
 if (document.querySelector('#homeTimeline-json') != null) {
+
+ 
   const timelineArray = await mockroblog.getHomeTimeline(getUser())
   console.log(timelineArray)
+
   setTimeout(async function() { 
     const display = document.querySelector('#homeTimeline-json')
     for (const timeline in timelineArray) { 
@@ -335,8 +373,7 @@ if (document.querySelector('#homeTimeline-json') != null) {
       )
     }
   }, 1000);
- 
-    
+
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
     followButton.addEventListener('click', async event => {

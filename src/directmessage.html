@@ -11,27 +11,16 @@
       <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
         <span class="ml-3 text-xl">Mockroblog - Direct Message</span>
       </a>
-      <!--
-      <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-          <a href="aboutus.html" class="mr-5 hover:text-gray-900">About Us</a>
-          <a href="yourtimeline.html" class="mr-5 hover:text-gray-900">User Timeline</a>
-          <a href="hometimeline.html" class="mr-5 hover:text-gray-900">Home Timeline</a>
-          <a href="publictimeline.html" class="mr-5 hover:text-gray-900">Public Timeline</a>
-      </nav>
-      <h1>Ajax starting point</h1>
-
-      <form>
-        <label for="verse-choose">Choose a verse</label>
-        <select id="verse-choose" name="verse-choose">
-          <option>Verse 1</option>
-          <option>Verse 2</option>
-          <option>Verse 3</option>
-          <option>Verse 4</option>
-        </select>
-        -->
-      </form>
     </div>
   </header>
+  </div>
+  <div class="relative mb-4">
+  <label for="dmOtherUser" class="leading-7 text-sm text-gray-600">Username</label>
+  <input type="text" id="dmOtherUser" name="text" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+  <button id="searchOtherUser" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+    Search
+  </button>  
+  </div>
   <pre id="directMessage-json">
   </pre>
   <ul id="messages"></ul>

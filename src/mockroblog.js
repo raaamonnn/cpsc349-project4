@@ -190,21 +190,3 @@ export async function postMessage (userId, text) {
       console.log(json)
     })
 }
-
-export async function receiveDM (from_user_id, to_user_id) {
-  // return fetch(`http://localhost:5000/direct_messages/?from_user_id=${from_user_id}&to_user_id=${to_user_id}&in_reply to_id=${in_reply_to_id}&timestamp=${timestamp}&text=${text}`, { method: 'get' })
-  // {"from_user_id":1,"id":2,"in_reply_to_id":1,"text":"Thanks! Going to share this with Dr. Ryu.","timestamp":"2021-08-05 03:23:29","to_user_id":3}]}
-  /*
-  const response = await fetch(`http://localhost:5000/direct_messages/?from_user_id=${from_user_id}&to_user_id=${to_user_id}`, { method: 'get' })
-  const json = await response.json()
-  return json.resources
-  */
-  
-  return fetch(`http://localhost:5000/direct_messages/?from_user_id=${from_user_id}&to_user_id=${to_user_id}`, { method: 'get' })
-    .then((res) => res.json())
-    .then((json) => {
-      return json.resources
-    }).catch((error) => {
-      throw error
-    })
-}
