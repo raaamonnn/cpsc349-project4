@@ -25,6 +25,7 @@ const setUserSearch = async function (userId) {
 const getUserSearch = function () {
   const saved = sessionStorage.getItem('saveUserSearch')
   if (saved) {
+    console.log(saved)
     return JSON.parse(saved)
   }
 }
@@ -41,6 +42,154 @@ if (document.getElementById('finalpost') != null) {
     } else {
       alert('Please add a message')
     }
+  })
+}
+
+//message button foot
+if (document.getElementById('sendMessage') != null){
+  const msgBtn = document.getElementById('sendMessage')
+    msgBtn.addEventListener('click', function () {
+    window.location.href = 'directmessage.html'
+  })
+}
+
+//post button foot
+//message button foot
+if (document.getElementById('postBut') != null){
+  const pstBtn = document.getElementById('postBut')
+    pstBtn.addEventListener('click', function () {
+    window.location.href = 'post.html'
+  })
+}
+
+    /*
+    button.addEventListener("click", function(){
+      let newMessage = document.createElement("li");
+      newMessage.innerHTML = textbox.value;
+      messages.appendChild(newMessage);
+      textbox.value = "";
+    })
+    */
+   /*return fetch(`http://localhost:5000/posts/?follower_id=${userId}&following_id=${userIdToStopFollowing}`, { method: 'get' })
+      //direct_messages(from_user_id, to_user_id, in_reply_to_id, timestamp, text)
+      .then((res) => res.json())
+    .then((json) => {
+      console.log(json)
+    })
+}
+    */
+
+/*
+if (document.querySelector('#publicTimeline-json') != null) {
+  const timeline = await mockroblog.getPublicTimeline()
+  console.log(timeline)
+  const display = document.querySelector('#publicTimeline-json')
+
+  for(const key in timeline) {
+    display.innerHTML += (
+      `<link href= 
+      "https://unpkg.com/tailwindcss@%5E1.0/dist/tailwind.min.css"
+              rel="stylesheet">
+             <!--Style taken from Tailblocks-->
+      <section class="text-gray-600 body-font overflow-hidden">
+          <div class="container px-5 py-24 mx-auto">
+            <div class="-my-8 divide-y-2 divide-gray-100">
+              <div class="py-8 flex flex-wrap md:flex-nowrap">
+                <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                  <span class="font-semibold title-font text-black-900"><a class="searchUser" href="">${await mockroblog.returnUsername(timeline[key].user_id)}</span>
+                  <span class="mt-1 text-gray-500 text-sm">${timeline[key].timestamp}</span>
+                </div>
+                <div class="md:flex-grow">
+                  <p class="leading-relaxed">${timeline[key].text}</p>
+                  <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </section>
+        `
+    )
+  }
+*/
+
+
+if (document.getElementById('dmOtherUser')) {
+  const searchButton = document.getElementById('searchOtherUser')
+  searchButton.addEventListener('click', async event => {
+    event.preventDefault()
+
+    const userToSearch = document.getElementById('dmOtherUser').value
+    
+    //receive DM on page
+if (document.querySelector('#directMessage-json') != null) {
+  let messages = document.getElementById("messages");
+  const timeline = await fetch(`http://localhost:5000/direct_messages/?from_user_id=${await mockroblog.returnId(userToSearch)}&to_user_id=${getUser()}`, { method: 'get' })
+  .then((res) => res.json())
+  .then((json) => {
+    return json.resources
+  }).catch((error) => {
+    throw error
+  })
+  let firstMessage = document.createElement("li");
+      //firstMessage.innerHTML = 'You:  ' + textbox.value;
+      //messages.appendChild(newMessage);
+  console.log(timeline)
+  for(const key in timeline) {
+    firstMessage.innerHTML += (
+      `${await mockroblog.returnUsername(timeline[key].from_user_id)}: <br>
+      ${timeline[key].text}<br>
+       <br>
+        `
+      )
+    }
+    messages.appendChild(firstMessage);
+}
+  })
+
+  //send message on DM page
+  if (document.getElementById('sendMsg') != null) {
+    let messages = document.getElementById("messages");
+    let textbox = document.getElementById("inputMsg");
+    const sndBtn = document.getElementById('sendMsg');
+    sndBtn.addEventListener('click', async event => {
+      event.preventDefault()
+    if (document.getElementById('inputMsg').value) {
+      
+    const userToSearch = document.getElementById('dmOtherUser').value
+    console.log("ASDSADSD")
+    await fetch(`http://localhost:5000/direct_messages/`, {
+    method: 'post',
+    // follower_id=${getUser()}&following_id=${await mockroblog.returnId(userToSearch)}`
+    body: JSON.stringify({
+      from_user_id: `${getUser()}`,
+      to_user_id: `${await mockroblog.returnId(userToSearch)}`,
+      text: `${textbox.value}`
+    })
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json)
+    })
+
+
+      let newMessage = document.createElement("li");
+      newMessage.innerHTML = 'You:  <br>' + textbox.value + '<br><br>';
+      messages.appendChild(newMessage);
+      textbox.value = "";
+
+    } else {
+      alert('Please add a message')
+    }
+  })
+}
+}
+
+//cancel message on DM page
+    if (document.getElementById('cancelMessage') != null){
+  const msgBtn = document.getElementById('cancelMessage')
+    msgBtn.addEventListener('click', function () {
+    window.location.href = 'hometimeline.html'
   })
 }
 
@@ -158,6 +307,7 @@ if (document.querySelector('#searchUser') != null) {
                 <div class="md:flex-grow">
                   <p class="leading-relaxed">${timeline[key].text}</p>
                   <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
+                  <button class="LBtn"> Like </button>
                 </div>
                 
               </div>
@@ -184,14 +334,26 @@ if (document.querySelector('#searchUser') != null) {
       }
     })
   })
+  const likeButton = document.getElementsByClassName('LBtn')
+  Array.from(likeButton).forEach((likeButton) => {
+    let lastButton = 'Unlike'
+    likeButton.addEventListener('click', function () {
+      const temporayBtn = likeButton.innerHTML
+      likeButton.innerHTML = lastButton
+      lastButton = temporayBtn
+    })
+  })
   
 }
 
 
 // home timeline
 if (document.querySelector('#homeTimeline-json') != null) {
+
+ 
   const timelineArray = await mockroblog.getHomeTimeline(getUser())
   console.log(timelineArray)
+
   setTimeout(async function() { 
     const display = document.querySelector('#homeTimeline-json')
     for (const timeline in timelineArray) { 
@@ -212,6 +374,7 @@ if (document.querySelector('#homeTimeline-json') != null) {
                   <div class="md:flex-grow">
                     <p class="leading-relaxed">${timelineArray[timeline].text}</p>
                     <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timelineArray[timeline].user_id)}</button>
+                    <button class="LBtn"> Like </button>
                   </div>
                   
                 </div>
@@ -222,8 +385,7 @@ if (document.querySelector('#homeTimeline-json') != null) {
       )
     }
   }, 1000);
- 
-    
+  
   const followButton = document.getElementsByClassName('btn')
   Array.from(followButton).forEach((followButton) => {
     followButton.addEventListener('click', async event => {
@@ -260,6 +422,15 @@ if (document.querySelector('#homeTimeline-json') != null) {
       return false;
     })
   })
+  const likeButton = document.getElementsByClassName('LBtn')
+  Array.from(likeButton).forEach((likeButton) => {
+    let lastButton = 'Unfollow'
+    likeButton.addEventListener('click', function () {
+      const temporayBtn = likeButton.innerHTML
+      likeButton.innerHTML = lastButton
+      lastButton = temporayBtn
+    })
+  })
 }
 
 // public timeline
@@ -285,6 +456,7 @@ if (document.querySelector('#publicTimeline-json') != null) {
                 <div class="md:flex-grow">
                   <p class="leading-relaxed">${timeline[key].text}</p>
                   <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
+                  <button class="LBtn"> Like </button>
                 </div>
                 
               </div>
@@ -325,4 +497,15 @@ if (document.querySelector('#publicTimeline-json') != null) {
       }
     })
   })
+  
+  const likeButton = document.getElementsByClassName('LBtn')
+  Array.from(likeButton).forEach((likeButton) => {
+    let lastButton = 'Unlike'
+    likeButton.addEventListener('click', function () {
+      const temporayBtn = likeButton.innerHTML
+      likeButton.innerHTML = lastButton
+      lastButton = temporayBtn
+    })
+  })
+
 }
