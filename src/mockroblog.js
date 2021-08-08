@@ -123,6 +123,52 @@ export async function removeFollower (userId, userIdToStopFollowing) {
     })
 }
 
+// export async function returnPost (userId) {
+//   return fetch(`http://localhost:5000/likes/?follower_id=${userId}`, { method: 'get' })
+//     .then((res) => res.json())
+//     .then((json) => {
+//       console.log('Remove Follower: ')
+//       console.log(json)
+//       for (const key in json.resources) {
+//         if (json.resources[key].id) {
+//           fetch(`http://localhost:5000/likes/${json.resources[key].id}`, { method: 'get' })
+//             .then((res) => res.json())
+//             .then((json) => {
+//               console.log(json)
+//             })
+//         }
+//       }
+//     })
+// }
+
+// export async function checkLike (userId, postId) {
+//   return fetch(`http://localhost:5000/likes/?user_id=${userId}&post_id=${postId}`, { method: 'get' })
+//     .then((res) => res.json())
+//     .then((json) => {
+//       for (const key in json.resources) {
+//         return true
+//       }
+//       return false
+//       // console.log('done')
+//     }).catch((error) => {
+// 		  throw error
+//     })
+// }
+
+// export async function LikePost (userId, postId) {
+//   return fetch('http://localhost:5000/likes/', {
+//     method: 'post',
+//     body: JSON.stringify({
+//       user_id: `${userId}`,
+//       post_id: `${postId}`
+//     })
+//   })
+//     .then((res) => res.json())
+//     .then((json) => {
+//       console.log(json)
+//     })
+// }
+
 export async function getUserTimeline (userId) {
   return fetch(`http://localhost:5000/posts/?sort=-timestamp&user_id=${userId}`, { method: 'get' })
     .then((res) => res.json())
@@ -190,3 +236,19 @@ export async function postMessage (userId, text) {
       console.log(json)
     })
 }
+
+/*
+export async function likes (userId, post_id) {
+  return fetch('http://localhost:5000/likes/', {
+    method: 'post',
+    body: JSON.stringify({
+      user_id: `${userId}`,
+      text: `${post_id}`
+    })
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json)
+    })
+}
+*/
