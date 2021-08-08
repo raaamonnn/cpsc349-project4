@@ -25,6 +25,7 @@ const setUserSearch = async function (userId) {
 const getUserSearch = function () {
   const saved = sessionStorage.getItem('saveUserSearch')
   if (saved) {
+    console.log(saved)
     return JSON.parse(saved)
   }
 }
@@ -306,6 +307,7 @@ if (document.querySelector('#searchUser') != null) {
                 <div class="md:flex-grow">
                   <p class="leading-relaxed">${timeline[key].text}</p>
                   <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
+                  <button class="LBtn"> Like </button>
                 </div>
                 
               </div>
@@ -330,6 +332,15 @@ if (document.querySelector('#searchUser') != null) {
         await mockroblog.addFollower(userId, userToFollowId)
         alert("You have followed " + userToFollow)
       }
+    })
+  })
+  const likeButton = document.getElementsByClassName('LBtn')
+  Array.from(likeButton).forEach((likeButton) => {
+    let lastButton = 'Unlike'
+    likeButton.addEventListener('click', function () {
+      const temporayBtn = likeButton.innerHTML
+      likeButton.innerHTML = lastButton
+      lastButton = temporayBtn
     })
   })
   
@@ -363,6 +374,7 @@ if (document.querySelector('#homeTimeline-json') != null) {
                   <div class="md:flex-grow">
                     <p class="leading-relaxed">${timelineArray[timeline].text}</p>
                     <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timelineArray[timeline].user_id)}</button>
+                    <button class="LBtn"> Like </button>
                   </div>
                   
                 </div>
@@ -373,11 +385,11 @@ if (document.querySelector('#homeTimeline-json') != null) {
       )
     }
   }, 1000);
-
-  const followButton = document.getElementsByClassName('btn')
+  
+  const followButton = document.getElementsByClassName('#btn')
   Array.from(followButton).forEach((followButton) => {
-    followButton.addEventListener('click', async event => {
-      event.preventDefault();
+    followButton.addEventListener('click', async function() {
+      //event.preventDefault();
       let userToFollow = followButton.innerHTML.replace(" Follow / Unfollow ", "")
       
       let userId = getUser();
@@ -392,7 +404,7 @@ if (document.querySelector('#homeTimeline-json') != null) {
     })
   })
 
-  const searchUserArray = document.getElementsByClassName('searchUser')
+  const searchUserArray = document.getElementsByClassName('#searchUser')
   Array.from(searchUserArray).forEach((searchUser) => {
     searchUser.addEventListener('click', async event => {
       event.preventDefault();
@@ -408,6 +420,15 @@ if (document.querySelector('#homeTimeline-json') != null) {
         console.log("else")
       }
       return false;
+    })
+  })
+  const likeButton = document.getElementsByClassName('LBtn')
+  Array.from(likeButton).forEach((likeButton) => {
+    let lastButton = 'Unlike'
+    likeButton.addEventListener('click', function () {
+      const temporayBtn = likeButton.innerHTML
+      likeButton.innerHTML = lastButton
+      lastButton = temporayBtn
     })
   })
 }
@@ -435,6 +456,7 @@ if (document.querySelector('#publicTimeline-json') != null) {
                 <div class="md:flex-grow">
                   <p class="leading-relaxed">${timeline[key].text}</p>
                   <button class="btn"> Follow / Unfollow ${await mockroblog.returnUsername(timeline[key].user_id)}</button>
+                  <button class="LBtn"> Like </button>
                 </div>
                 
               </div>
@@ -475,4 +497,14 @@ if (document.querySelector('#publicTimeline-json') != null) {
       }
     })
   })
+  const likeButton = document.getElementsByClassName('LBtn')
+  Array.from(likeButton).forEach((likeButton) => {
+    let lastButton = 'Unlike'
+    likeButton.addEventListener('click', function () {
+      const temporayBtn = likeButton.innerHTML
+      likeButton.innerHTML = lastButton
+      lastButton = temporayBtn
+    })
+  })
+
 }
